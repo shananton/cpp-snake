@@ -8,9 +8,13 @@ namespace snake::game {
 
 enum class Direction { Right, Up, Left, Down };
 
+inline bool are_opposite(const Direction &lhs, const Direction &rhs) {
+  return (static_cast<int>(lhs) ^ static_cast<int>(rhs)) == 2;
+}
+
 struct Position {
-  size_t x;
-  size_t y;
+  int x;
+  int y;
 
   auto operator<=>(const Position &) const = default;
   Position moved_in_direction(const Direction &dir) const;
@@ -31,18 +35,23 @@ private:
 
 class Game {
 public:
-  Position head() const;
+  size_t width() const { return width_; }
+  size_t height() const { return height_; }
+  const std::deque<Position> &snake() const { return snake_; }
+  Position fruit() const { return fruit_; }
+  Position head() const { return snake_.front(); }
+  bool try_change_direction(const Direction &dir);
   GameState make_move(const Direction &dir);
 
 private:
   bool is_collision(const Position &pos) const;
   void place_fruit();
 
-  size_t width_;
-  size_t height_;
+  int width_;
+  int height_;
   std::deque<Position> snake_;
   Position fruit_;
-  RandomGenerator<size_t> rng_;
+  RandomGenerator<int> rng_;
 };
 
 } // namespace snake::model

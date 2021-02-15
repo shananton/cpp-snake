@@ -14,10 +14,6 @@ Position Position::moved_in_direction(const Direction &dir) const {
   return {x + DX[dir_no], y + DY[dir_no]};
 }
 
-Position Game::head() const {
-  return snake_.front();
-}
-
 GameState Game::make_move(const Direction &dir) {
   auto next_pos = head().moved_in_direction(dir);
   if (is_collision(next_pos)) {
